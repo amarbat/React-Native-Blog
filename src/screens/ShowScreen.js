@@ -6,6 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 const ShowScreen = ({navigation}) => {
   const { state } = useContext (Context);
   const blogPost = state.find ((post) => post.id === navigation.getParam ('id'));
+
   return (
     <View>
       <Text>{blogPost ? blogPost.title : "not found"}</Text>
@@ -17,7 +18,9 @@ const ShowScreen = ({navigation}) => {
 ShowScreen.navigationOptions = ({navigation}) => {
   return {
     headerRight: () => (
-      <TouchableOpacity onPress={() => navigation.navigate('Edit')}>
+      <TouchableOpacity onPress={() => {
+        navigation.navigate('Edit', {id: navigation.getParam ('id')});
+      }}>
         <FontAwesome name="pencil" size={24} color="black" />
       </TouchableOpacity>
     )
