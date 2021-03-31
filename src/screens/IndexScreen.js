@@ -1,10 +1,25 @@
-import React, { useContext } from 'react';
-import { View, Text, StyleSheet, FlatList, Button, TouchableOpacity } from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Context } from '../context/BlogContext';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 
 const IndexScreen = ({ navigation }) => {
-  const { state, addBlogPost, deleteBlogPost } = useContext (Context);
+  const { state, deleteBlogPost, getBlogPosts} = useContext (Context);
+
+  useEffect (() => {
+// -- the very first rendering
+    getBlogPosts ();
+// -- anytime this screen is focused
+    const listener       = navigation.addListener ('didFocus', () => {
+      getBlogPosts ()
+    });
+
+    return () => {
+      listener.remove ();
+    };
+  }, []);
+
+
 
   return (
     <View style={styles.container}>
@@ -34,7 +49,7 @@ IndexScreen.navigationOptions = ({navigation}) => {
       <TouchableOpacity onPress={() => navigation.navigate ('Create')}>
         <Entypo name="plus" size={24} color="black" />
       </TouchableOpacity>
-    )
+                           )
   };
 };
 
